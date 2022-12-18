@@ -45,7 +45,8 @@ public class ShapeTests {
 	
 	@Test
 	public void canvasTest () {
-		Canvas canvas = new Canvas (5, 5, new Shape[] {new Rectangle(5,5), new Square (3)});
+		Canvas innerCanvas = new Canvas (5, 5, new Shape[] {new Rectangle(5,5), new Square (3)});
+		Canvas canvas = new Canvas (5, 5, new Shape[] {new Rectangle(5,5), new Square (3), innerCanvas});
 		canvas.setDirection(Canvas.COLUMN_DIRECTION);
 		displayStrings(canvas.presentation(5));
 	}

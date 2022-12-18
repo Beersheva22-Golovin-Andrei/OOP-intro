@@ -20,8 +20,9 @@ public class Canvas extends Shape {
 	@Override
 	public String[] presentation(int offset) {
 		String [] res;
+		setDirectionForAllInnerCanvases();
 		if (direction.equals(RAW_DIRECTION)) {
-			int canvasHeight = this.getHeight();			
+			int canvasHeight = super.getHeight();			
 			StringBuilder[] resBuilder = new StringBuilder[canvasHeight];
 			Shape firstShape = shapes[0];
 			
@@ -75,6 +76,23 @@ public class Canvas extends Shape {
 	public void setMergin(int mergin) {
 		this.mergin = mergin;
 	}
+	
+	@Override
+	public int getHeight() {
+		int height=0;
+		for (Shape s : shapes){
+			height=height + s.getHeight()+ mergin;
+		}
+		return height-mergin;
+	}
+	
+	private void setDirectionForAllInnerCanvases () {	
+		for (Shape s : shapes) {
+			if (s instanceof Canvas) {
+				((Canvas)s).setDirection(this.direction);
+			}
+		}
+	}
 
 	public String[] convertBuilderArrToStringArr (StringBuilder[] str) {
 		String[]res = new String[str.length];
@@ -82,5 +100,5 @@ public class Canvas extends Shape {
 			res[i] = str[i].toString();		
 		}
 		return res;
-	}
+	}	
 }
