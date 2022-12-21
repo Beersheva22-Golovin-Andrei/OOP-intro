@@ -30,22 +30,18 @@ public class MyArrays {
 		objects[j] = tmp;
 		
 	}
-	
-	/**
-	 * 
-	 * Option 1. If all the same int searchedNumber
-	 */
-	
-	public static <T> int binarySearch (T[] array, int searchedNumber, Comparator<Integer> comp) throws ClassCastException {
+
+
+	public static <T> int binarySearch (T[] array, int searchedNumber, Comparator<T> comp) throws ClassCastException {
 
 		int res=0;
 		int left = 0;
 		int right = array.length-1;
 		int mid = (left + right)/2;		
 		if (array[mid] instanceof Number) {			
-			int compRes;
-			while (left <= right) {
-        		compRes = comp.compare((Integer)array[mid], searchedNumber);        	
+			int compRes=1;
+			while (left <= right && compRes!=0) {
+        		compRes = comp.compare(array[mid], (T)(Integer.valueOf(searchedNumber)));        	
             if (compRes < 0)
             	left = mid + 1;
             else if (compRes > 0)
@@ -53,21 +49,20 @@ public class MyArrays {
             else
                 res = mid;
         }
-        res=-(left+1);
+		if (compRes != 0) res=-(left+1);
 		} else throw new ClassCastException();			
 			return res;
     }
-	/**
-	 * Option 2. If all the same Comparator <T>
-	 */
+	
+
 	public static <T> int binarySearch (T[] array, T searchedNumber, Comparator<T> comp) {
 
 		int res=0;
 		int left = 0;
 		int right = array.length-1;
 		int mid = (left + right)/2;
-		int compRes;
-        while (left <= right) {
+		int compRes = 1;
+        while (left <= right && compRes!=0) {
         	compRes = comp.compare(array[mid], searchedNumber);
         	if (compRes < 0)
             	left = mid + 1;
@@ -76,9 +71,31 @@ public class MyArrays {
             else
                 res = mid;
         }
-        res=-(left+1);		
-			return res;
+        if (compRes != 0) res=-(left+1);		
+		return res;
     }
+	
+	public static <T extends Number> int binarySearch (T[] array, int searchedNumber) {
 
+		int res=0;
+		int left = 0;
+		int right = array.length-1;
+		int mid = (left + right)/2;		
+		
+			int compRes=1;
+			while (left <= right && compRes!=0) {
+				
+				Integer tempInt = array[mid].intValue();
+            if (tempInt < searchedNumber)
+            	left = mid + 1;
+            else if (tempInt > searchedNumber)
+            	right = mid - 1;
+            else
+                res = mid;
+        }
+		if (compRes != 0) res=-(left+1);	
+			return res;
+
+}
 }
 
