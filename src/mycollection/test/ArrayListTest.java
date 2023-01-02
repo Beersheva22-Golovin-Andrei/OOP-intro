@@ -1,12 +1,25 @@
-package mycollection;
+package mycollection.test;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-public class ArrayListTest {
+import mycollection.ArrayList;
+import mycollection.List;
+
+public class ArrayListTest extends ListTest {
+
+	
+	@BeforeEach
+	@Override 
+	void setUp() throws Exception {
+		collection = new ArrayList<>();
+		super.setUp();
+	}
 
 	
 	List<Integer> testList = new ArrayList<>();
@@ -19,6 +32,7 @@ public class ArrayListTest {
 	
 	
 	@Test
+	@Disabled
 	public void ListTest () {
 		assertTrue(testList.isEmpty());
 		setAllZeros(15);
@@ -35,7 +49,7 @@ public class ArrayListTest {
 		testList.add(10, 1000);
 		assertEquals(1000, testList.get(10));
 		assertEquals(19, testList.size());
-		assertTrue(testList.removeElement(1000));
+		//assertTrue(testList.remove(1000));
 		assertEquals(18, testList.size());
 		assertTrue(testList.removeIf(a->a==0));
 		assertEquals(3, testList.size());
@@ -44,6 +58,10 @@ public class ArrayListTest {
 		
 		Object []artrr =  testList.toArray(new Integer[2]);
 		assertEquals(3, artrr.length);
+	}
+	
+	void iterTest() {
+		
 	}
 
 }

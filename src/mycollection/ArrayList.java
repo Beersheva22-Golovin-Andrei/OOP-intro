@@ -1,6 +1,9 @@
 package mycollection;
 
 
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 public class ArrayList<T> implements List<T> {
@@ -8,6 +11,22 @@ public class ArrayList<T> implements List<T> {
 	static final int DEFAULT_CAPACITY = 16;
 	private T [] array;
 	private int size;
+	
+	private class ArrayListIterator implements Iterator<T> {
+		int currentIndex = 0;
+			@Override
+			public boolean hasNext() {	
+				return currentIndex<size-1;
+			}
+
+			@Override
+			public T next() {
+				if (!hasNext()) {
+					throw new NoSuchElementException();
+			}
+				return get(currentIndex++);
+		}
+	}
 	
 	@SuppressWarnings("unchecked")
 	public ArrayList(int capacity) {
@@ -27,15 +46,12 @@ public class ArrayList<T> implements List<T> {
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
 	private void reallocate() {
-		T[] arrayIncreased = (T[]) new Object[array.length*2];
-		System.arraycopy(array, 0, arrayIncreased, 0, array.length);
-		array=arrayIncreased;
+		array = Arrays.copyOf(array, array.length * 2);
 	}
 
 	@Override
-	public boolean removeElement(T pattern) {
+	public boolean remove(T pattern) {
 		boolean res = false;
 		int index = indexOf(pattern);
 		if (index>0) {
@@ -80,7 +96,7 @@ public class ArrayList<T> implements List<T> {
 
 	@Override
 	public boolean contains(T pattern) {
-		return indexOf(pattern)>0;
+		return indexOf(pattern)>-1;
 	}
 
 	@Override
@@ -99,7 +115,7 @@ public class ArrayList<T> implements List<T> {
 
 	@Override
 	public void add(int index, T element) {		
-		checkIndex(index);
+		if (index<0 || index>size) throw new IndexOutOfBoundsException();
 		if (size==array.length) {
 			reallocate();
 		}
@@ -121,7 +137,7 @@ public class ArrayList<T> implements List<T> {
 	public int indexOf(T pattern) {
 	int res =-1;
 	int i=0;
-	while (i<array.length && res<0) {
+	while (i<size && res<0) {
 		if (array[i] == null ? array[i] == pattern : array[i].equals(pattern)) {
 			res=i;
 		}
@@ -133,7 +149,7 @@ public class ArrayList<T> implements List<T> {
 	@Override
 	public int lastIndexOf(T pattern) {
 		int res =-1;
-		int i=array.length-1;
+		int i=size-1;
 		while (i>=0 && res<0) {
 			if (array[i] == null ? array[i] == pattern : array[i].equals(pattern)) {
 				res=i;
@@ -154,4 +170,11 @@ public class ArrayList<T> implements List<T> {
 		checkIndex(index);
 		array[index]=element;
 	}
+	
+	@Override
+	public Iterator<T> iterator() {
+		
+		return new ArrayListIterator();
+	}
+
 }

@@ -2,10 +2,10 @@ package mycollection;
 
 import java.util.function.Predicate;
 
-public interface Collection<T> {
+public interface Collection<T> extends Iterable<T> {
 
 	boolean add(T element);
-	boolean removeElement (T pattern);
+	boolean remove (T pattern);
 	boolean removeIf(Predicate<T> predicate);
 	boolean isEmpty();
 	int size();
