@@ -16,7 +16,7 @@ public class ArrayList<T> implements List<T> {
 		int currentIndex = 0;
 			@Override
 			public boolean hasNext() {	
-				return currentIndex<size-1;
+				return currentIndex<size;
 			}
 
 			@Override
@@ -100,11 +100,10 @@ public class ArrayList<T> implements List<T> {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public T[] toArray(T[] ar) {
 		
 		 if (ar.length < size) {
-			 ar = (T[]) new Object[size];
+			 ar = Arrays.copyOf(ar, size);
 		 }
 		 System.arraycopy(array, 0, ar, 0, size);
 	    if (ar.length> size) {
