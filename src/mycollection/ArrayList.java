@@ -85,18 +85,8 @@ public class ArrayList<T> implements List<T> {
 	}
 
 	@Override
-	public boolean isEmpty() {
-		return size == 0;
-	}
-
-	@Override
 	public int size() {
 		return size;
-	}
-
-	@Override
-	public boolean contains(T pattern) {
-		return indexOf(pattern)>-1;
 	}
 
 	@Override
@@ -106,9 +96,7 @@ public class ArrayList<T> implements List<T> {
 			 ar = Arrays.copyOf(ar, size);
 		 }
 		 System.arraycopy(array, 0, ar, 0, size);
-	    if (ar.length> size) {
-	    	ar[size]=null;
-	    }
+		 Arrays.fill(ar, size, ar.length, null);
 		return ar;
 	}
 
