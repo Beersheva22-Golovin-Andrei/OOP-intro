@@ -167,7 +167,7 @@ public class LinkedList<T> implements List<T> {
 
 	@Override
 	public T remove(int index) {
-		checkIndex(index, true);
+		checkIndex(index, false);
 		Node<T> removeble = getNode(index);
 		removeNode(removeble);
 		return removeble.obj;
