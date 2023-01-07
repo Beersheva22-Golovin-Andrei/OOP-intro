@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
-public class LinkedList<T> implements List<T> {
+public class LinkedList<T> extends AbstractCollection<T> implements List<T> {
 
 	private static class Node<T> {
 		T obj;
@@ -19,21 +19,34 @@ public class LinkedList<T> implements List<T> {
 
 	private Node<T> head;
 	private Node<T> tail;
-	private int size;
+
 
 	private class LinkedListIterator implements Iterator<T> {
-		int current = 0;
+		Node<T> current = head;
+		boolean flNext = false;
 		@Override
-		public boolean hasNext() {
-			return current <size;
+		public boolean hasNext() {			
+			return current != null;
 		}
 
 		@Override
 		public T next() {
-			if (!hasNext()) {
+			if(!hasNext()) {
 				throw new NoSuchElementException();
 			}
-			return get(current++);
+			T res = current.obj;
+			current = current.next;
+			flNext = true;
+			return res;
+		}
+		@Override
+		public void remove() {
+			if(!flNext) {
+				throw new IllegalStateException();
+			}
+			Node<T> removedNode = current == null ? tail : current.prev;
+			removeNode(removedNode);
+			flNext = false;
 		}
 	}
 
@@ -56,58 +69,48 @@ public class LinkedList<T> implements List<T> {
 		return t == null ? t == pattern : t.equals(pattern);
 	}
 
-	@Override
-	public boolean remove(T pattern) {
+	/*
+	 * @Override public boolean remove(T pattern) { boolean res = false; int i =0;
+	 * Node<T> current = head; while (i<size && !res) { if (isEquals(current.obj,
+	 * pattern)) { removeNode(current); res=true; } i++; current = current.next; }
+	 * return res; }
+	 */
+
+	/*
+	 * @Override public boolean removeIf(Predicate<T> predicate) { boolean res =
+	 * false; int i =0; Node<T> current = head; while (i<size) { if
+	 * (predicate.test(current.obj)) { removeNode(current); res=true; } else { i++;
+	 * 
+	 * } current = current.next; } return res; }
+	 */
+
+
+	/************************************************************************************/
+	//Comments only for LinkedList task of loop existence
+	public void setNext(int index1, int index2) {
+		if (index1 < index2) {
+			throw new IllegalArgumentException();
+		}
+		Node<T> node1 = getNode(index1);
+		node1.next = getNode(index2);
+		
+	}
+	public boolean hasLoop() {
+		Node<T> testNode = new Node<>(null);
+		Node<T> prevNode;
 		boolean res = false;
-		int i =0;
 		Node<T> current = head;
-		while (i<size && !res) {				
-			if (isEquals(current.obj, pattern)) {
-				removeNode(current);
-				res=true;
+		while (current!=null && !res) {
+			if (current.next==testNode) {
+				res = true;
 			}
-			i++;
+			prevNode = current;
 			current = current.next;
+			prevNode.next = testNode;
 		}	
 		return res;
 	}
-
-	@Override
-	public boolean removeIf(Predicate<T> predicate) {
-		boolean res = false;
-		int i =0;
-		Node<T> current = head;
-		while (i<size) {				
-			if (predicate.test(current.obj)) {
-				removeNode(current);
-				res=true;
-			} else {
-			i++;
-			
-			}
-			current = current.next;
-		}	
-		return res;
-	}
-
-	@Override
-	public int size() {		
-		return size;
-	}
-
-	@Override
-	public T[] toArray(T[] ar) {
-		if(ar.length < size) {
-			ar = Arrays.copyOf(ar, size);
-		}
-		Node<T> current = head;
-		for(int i = 0; i < size; i++) {
-			ar[i] = current.obj;
-			current = current.next;
-		}
-		Arrays.fill(ar, size, ar.length, null);
-		return ar;
-	}
+	/*********************************************************************************************/
 
 	@Override
 	public Iterator<T> iterator() {

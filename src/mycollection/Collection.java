@@ -1,29 +1,38 @@
 package mycollection;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.function.Predicate;
 
 public interface Collection<T> extends Iterable<T> {
 
-	boolean add(T element);
-	boolean remove (T pattern);
-	boolean removeIf(Predicate<T> predicate);
-	int size();
-	int indexOf(T pattern);
-
-	T[] toArray (T[]ar);
-	
-	default  void checkIndex(int index, boolean sizeIncluded) {
-		int sizeDelta = sizeIncluded ? 0 : 1;
-		if (index < 0 || index > size() - sizeDelta) {
-			throw new IndexOutOfBoundsException(index);
+	boolean add (T element);
+	boolean remove(T pattern);
+	default boolean removeIf(Predicate<T> predicate) {
+		Iterator<T> it = iterator();
+		int oldSize = size();
+		while(it.hasNext()) {
+			T obj = it.next();
+			if (predicate.test(obj)) {
+				it.remove();
+			}
 		}
-		
+		return oldSize > size();
 	}
-	default boolean contains(T pattern) {	
-		return indexOf(pattern) > -1;
-	}
-	
-	default boolean isEmpty() {		
-		return size() == 0;
+	boolean isEmpty();
+	int size();
+	boolean contains(T pattern);
+
+	default T[] toArray (T[] array) {
+		if (array.length < size()) {
+			array = Arrays.copyOf(array, size());
+		}
+		Iterator<T> it = iterator();
+		int i =0;
+		while(it.hasNext()) { 
+			array[i++] = it.next();		
+		}
+		Arrays.fill(array, size(), array.length, null);
+		return array;
 	}
 }
