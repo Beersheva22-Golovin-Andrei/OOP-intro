@@ -20,13 +20,10 @@ public class LinkedListTest extends ListTest {
 		llist = (LinkedList<Integer>) collection;
 	}
 	
-	@Test
-	void loopTestFalse() {
-		assertFalse(llist.hasLoop());
-	}
 	
 	@Test
-	void loopTestTrue (){
+	void loopTest (){
+		assertFalse(llist.hasLoop());
 		assertThrowsExactly(IllegalArgumentException.class, ()->llist.setNext(1,4));
 		llist.setNext(4,1);
 		assertTrue(llist.hasLoop());

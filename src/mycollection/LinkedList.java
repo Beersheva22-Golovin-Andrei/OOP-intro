@@ -96,17 +96,20 @@ public class LinkedList<T> extends AbstractCollection<T> implements List<T> {
 		
 	}
 	public boolean hasLoop() {
-		Node<T> testNode = new Node<>(null);
-		Node<T> prevNode;
+		Node<T> current1;
+		Node<T> current2;
+		current1=current2=head;
 		boolean res = false;
-		Node<T> current = head;
-		while (current!=null && !res) {
-			if (current.next==testNode) {
+		boolean flagEnd = false;
+		while (!flagEnd && !res) {
+			current1=current1.next;
+			current2 = current2.next;
+			if (current2!=null) {
+				current2 = current2.next;
+			} else flagEnd = true;
+			if (current1==current2) {
 				res = true;
 			}
-			prevNode = current;
-			current = current.next;
-			prevNode.next = testNode;
 		}	
 		return res;
 	}
@@ -180,7 +183,7 @@ public class LinkedList<T> extends AbstractCollection<T> implements List<T> {
 		Node<T> prevNode = node.prev;
 		Node<T> nextNode = node.next;
 		if (prevNode == null && nextNode== null) {
-			node =null;
+			head=tail =null;
 		} else  if (prevNode == null) {
 			nextNode.prev = null;
 			head = nextNode;
