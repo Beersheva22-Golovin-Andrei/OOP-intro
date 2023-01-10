@@ -33,7 +33,7 @@ public class ArrayList<T> extends AbstractCollection<T> implements List<T> {
 			if(!flNext) {
 				throw new IllegalStateException();
 			}
-			removeByIndex(current-1);
+			removeByIndex(--current);
 			flNext = false;
 		}
 
