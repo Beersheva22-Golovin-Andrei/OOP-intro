@@ -4,6 +4,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
+import java.util.Objects;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +30,5 @@ public class LinkedListTest extends ListTest {
 		llist.setNext(4,1);
 		assertTrue(llist.hasLoop());
 	}
-	
 	
 }

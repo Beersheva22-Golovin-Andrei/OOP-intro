@@ -17,47 +17,45 @@ import mycollection.Collection;
 
 public abstract class CollectionTest {
 
-	protected Integer [] numbers = {10, 100, -5, 134, 280, 120, 15};
+	protected Integer[] numbers = { 10, 100, -5, 134, 280, 120, 15 };
 	protected Integer ar[] = new Integer[numbers.length + 100];
 	protected Collection<Integer> collection;
-	protected Integer [] empty = {};
+	protected Integer[] empty = {};
+
 	@BeforeEach
 	void setUp() throws Exception {
-		
-		for(Integer num: numbers) {
+
+		for (Integer num : numbers) {
 			collection.add(num);
 		}
 	}
 
 	abstract void testAdd();
+
 	abstract void testIterator();
+
 	
+	  @Test void testRemove() { Integer [] expected = {10, 100, -5, 280, 120, 15};
+	  assertTrue(collection.remove((Integer)134)); Arrays.sort(expected); Integer
+	  [] actual = collection.toArray(empty); Arrays.sort(actual);
+	  assertArrayEquals(expected, actual);
+	  assertFalse(collection.remove((Integer)134)); }
+	 
 
-	@Test
-	void testRemove() {
-		Integer [] expected = {10, 100, -5,  280, 120, 15};
-		assertTrue(collection.remove((Integer)134));
-		assertArrayEquals(expected, collection.toArray(empty));
-		assertFalse(collection.remove((Integer)134));
-	}
+	
+	  @Test void testRemoveIf() { Integer []expected = {-5, 15};
+	  assertTrue(collection.removeIf(n -> n % 2 == 0)); assertArrayEquals(expected,
+	  collection.toArray(empty)); assertFalse(collection.removeIf(n -> n % 2 ==
+	  0)); assertTrue(collection.removeIf(n -> true));
+	  assertTrue(collection.isEmpty());
+	  
+	  }
+	 
 
-	@Test
-	void testRemoveIf() {
-		Integer []expected = {-5, 15};
-		assertTrue(collection.removeIf(n -> n % 2 == 0));
-		assertArrayEquals(expected, collection.toArray(empty));
-		assertFalse(collection.removeIf(n -> n % 2 == 0));
-		assertTrue(collection.removeIf(n -> true));
-		assertTrue(collection.isEmpty());
-		
-	}
-
-	@Test
-	void testIsEmpty() {
-		assertFalse(collection.isEmpty());
-		collection.removeIf(n -> true);
-		assertTrue(collection.isEmpty());
-	}
+	
+	  @Test void testIsEmpty() { assertFalse(collection.isEmpty());
+	  collection.removeIf(n -> true); assertTrue(collection.isEmpty()); }
+	 
 
 	@Test
 	void testSize() {
@@ -72,37 +70,39 @@ public abstract class CollectionTest {
 
 	@Test
 	void testToArray() {
-		
+
 		Arrays.fill(ar, 10);
 		assertTrue(ar == collection.toArray(ar));
-		for(int i = 0; i < numbers.length; i++) {
+		Arrays.sort(ar, 0, collection.size());
+		Arrays.sort(numbers);
+		for (int i = 0; i < numbers.length; i++) {
 			assertEquals(ar[i], numbers[i]);
 		}
-		for(int i = numbers.length; i < ar.length; i++) {
+		for (int i = numbers.length; i < ar.length; i++) {
 			assertNull(ar[i]);
 		}
-		
+
 	}
-	
+
 	@Test
 	void removeIteratorTest() {
-		final Iterator <Integer> it = collection.iterator();
-		assertThrowsExactly(IllegalStateException.class, ()->it.remove());
+		final Iterator<Integer> it = collection.iterator();
+		assertThrowsExactly(IllegalStateException.class, () -> it.remove());
 		Integer num = it.next();
 		assertTrue(collection.contains(num));
 		it.remove();
 		assertFalse(collection.contains(num));
 
-		assertThrowsExactly(IllegalStateException.class, ()->it.remove());
+		assertThrowsExactly(IllegalStateException.class, () -> it.remove());
 		Iterator<Integer> it1 = collection.iterator();
 
-		while(it1.hasNext()) {
+		while (it1.hasNext()) {
 			num = it1.next();
 		}
 		assertTrue(collection.contains(num));
 		it1.remove();
 		assertFalse(collection.contains(num));
 
-
 	}
+
 }
