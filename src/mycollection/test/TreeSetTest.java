@@ -28,7 +28,8 @@ public class TreeSetTest extends SetTest {
 		  Integer[] arr = new Integer[] {5, 40, 25, 90, 4, 31, 11, 2, 26};		  
 		  for (Integer i : arr) {
 			  trSet.add(i);
-		  }			
+		  }		
+		  assertFalse(trSet.add(11));
 			  Arrays.sort(arr); 
 			  Iterator<Integer> itr = trSet.iterator(); 
 			  for (Integer i : arr) { 
@@ -36,7 +37,16 @@ public class TreeSetTest extends SetTest {
 			  }
 			assertTrue(trSet.contains(25));
 			assertFalse(trSet.contains(0));
-			  
+			 Integer[] arr2 = new Integer[] {25,40,2,12,-6,19,0,11,62,1};
+			 Set<Integer> trSet2 = new TreeSet<>();
+			 for (Integer i : arr2) {
+				  trSet2.add(i);
+			  }
+			 Arrays.sort(arr2); 
+			 Iterator<Integer> itr2 = trSet2.iterator(); 
+			 for (Integer i : arr2) { 
+				  assertEquals(i, itr2.next()); 
+			  }
 	  }
 	 
 	  
