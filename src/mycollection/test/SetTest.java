@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import mycollection.Set;
 
-public class SetTest extends CollectionTest {
+public class SetTest extends SortedTest {
 	
 	Set<Integer> set ;
 	@BeforeEach

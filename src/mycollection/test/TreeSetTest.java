@@ -48,6 +48,19 @@ public class TreeSetTest extends SetTest {
 				  assertEquals(i, itr2.next()); 
 			  }
 	  }
+	  
+	  @Test
+	  void testRemove () {
+		  Set<Integer> trSet = new TreeSet<>();
+		  Integer[] arr = new Integer[] {5, 40, 25, 90, 4, 31, 11, 2, 26, 100, 27};		  
+		  for (Integer i : arr) {
+			  trSet.add(i);
+		  }	
+		  
+		  //trSet.remove(25);
+		  System.out.print(false);
+	
+	  }
 	 
 	  
 }

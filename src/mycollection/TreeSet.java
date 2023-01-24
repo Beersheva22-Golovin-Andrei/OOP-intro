@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class TreeSet<T> extends AbstractCollection<T> implements Set<T> {
+public class TreeSet<T> extends AbstractCollection<T> implements Sorted<T> {
 	   static private class Node<T> {
 		   T obj;
 		   Node<T> parent;
@@ -39,16 +39,16 @@ public class TreeSet<T> extends AbstractCollection<T> implements Set<T> {
 			res= current.obj;
 			count++;
 			return res;
-		}
-		
-		private Node<T> leftBottom (Node <T> node) {
+		}	   
+	   }
+	   
+	   private Node<T> leftBottom (Node <T> node) {
 			Node<T> intermid = node;
 			while (intermid.left !=null ) {
 				intermid=intermid.left;
 			}
 			return intermid;				
-		}		   
-	   }
+		}	
 	   
 	   private Node<T> root;
 	   private Comparator<T> comp;
@@ -95,11 +95,49 @@ public class TreeSet<T> extends AbstractCollection<T> implements Set<T> {
 				return nodeNew;
 		}
 		
+		private Node<T> getNode(T element) {
+			Node<T> current = root;
+			Node<T> parent = null;
+			int compRes;
+			while(current != null && (compRes = comp.compare(element, current.obj)) != 0) {
+				parent = current;
+				current = compRes < 0 ? current.left : current.right;
+			}
+			return current == null ? parent : current;
+		}
+		
 
 		@Override
 		public boolean remove(T pattern) {
-			// Not implemented yet
-			return false;
+			
+			Node<T> deletedNode = getNode(pattern);
+			Node<T> replacedNode;
+		
+			if (deletedNode != null) {
+			if (deletedNode.right != null && deletedNode.left!=null) {
+				replacedNode  = leftBottom(deletedNode.right);			
+				deletedNode.obj = replacedNode.obj;
+					if (replacedNode.right!=null) {
+						replacedNode.right.parent = replacedNode.parent;
+						replacedNode.parent.left = replacedNode.right;
+					} else {
+						replacedNode.parent.left = null;
+					}
+			} else {
+				replacedNode = deletedNode.right == null ? deletedNode.left : deletedNode.right;
+		
+			if (replacedNode != null) {
+				replacedNode.parent = deletedNode.parent;
+			}
+				if (comp.compare(pattern, deletedNode.parent.obj)<0) {
+					deletedNode.parent.left = replacedNode;
+				} else {
+					deletedNode.parent.right = replacedNode;
+				}			
+			
+			}	
+		}			
+			return deletedNode==null ? false : true;
 		}
 
 		@Override
@@ -120,9 +158,56 @@ public class TreeSet<T> extends AbstractCollection<T> implements Set<T> {
 	
 
 		@Override
-		public Iterator<T> iterator() {
-			
+		public Iterator<T> iterator() {			
 			return new TreeSetIterator();
+		}
+		
+		@Override
+		public T floor(T element) {
+			
+			
+			
+			return null;
+		}
+		@Override
+		public T ceiling(T element) {
+			Node<T> current = root;
+			boolean next = true;
+			if (comp.compare(current.obj, element) < 0) {
+				while(comp.compare(element, current.obj) > 0) {
+					current = current.right;
+				}
+			}
+			
+			while(next) {
+				if (current.left!=null) {
+				if(comp.compare(element, current.left.obj) < 0 && current.left.right != null) {
+						current = current.left.right;
+				
+				} else {
+					current = current.left;
+					next = false;
+				}
+			} else next =false;
+			}
+			
+			return current.obj;
+		}
+		@Override
+		public T first() {
+			return leftBottom(root).obj;
+		}
+		@Override
+		public T last() {
+			return rightBottom(root).obj;
+		}
+		
+		private Node<T>rightBottom (Node <T> node) {
+			Node<T> intermid = node;
+			while (intermid.right !=null ) {
+				intermid=intermid.right;
+			}
+			return intermid;				
 		}
  
 
