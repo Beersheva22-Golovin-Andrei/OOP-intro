@@ -61,6 +61,20 @@ public class TreeSetTest extends SetTest {
 		  System.out.print(false);
 	
 	  }
+	  
+	  @Test
+		void inversionTest() {
+			//{10, 100, -5, 134, 280, 120, 15};
+			set.inversion();
+			Integer expected[] = {280, 134, 120, 100, 15, 10, -5};
+			Integer actual[] = new Integer[expected.length];
+			int index = 0;
+			for(Integer num: set) {
+				actual[index++] = num;
+			}
+			assertArrayEquals(expected, actual);
+			assertTrue(set.contains(280));
+		}
 	 
 	  
 }

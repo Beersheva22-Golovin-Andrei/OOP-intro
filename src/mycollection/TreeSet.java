@@ -3,6 +3,8 @@ package mycollection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TreeSet<T> extends AbstractCollection<T> implements Sorted<T> {
 	   static private class Node<T> {
@@ -14,6 +16,8 @@ public class TreeSet<T> extends AbstractCollection<T> implements Sorted<T> {
 			   this.obj = obj;
 		   }
 	   }
+	   private static final String SYMBOL = " ";
+	   private static final int NUMBER_SYMBOLS_PER_LEVEL = 3;
 	   private class TreeSetIterator implements Iterator<T> {
 
 		   Node<T> current;
@@ -210,6 +214,84 @@ public class TreeSet<T> extends AbstractCollection<T> implements Sorted<T> {
 			}
 			return intermid;				
 		}
- 
+		
+		public void displayTreeRotated() {
+			displayTreeRotated(root, 0);
+		}
+		private void displayTreeRotated(Node<T> root, int level) {
+			if (root != null) {
+				displayTreeRotated(root.right, level + 1);
+				displayRoot(root, level);
+				displayTreeRotated(root.left, level + 1);
+			}
+			
+		}
+		private void displayRoot(Node<T> root, int level) {
+			System.out.printf("%s%s\n", SYMBOL.repeat(NUMBER_SYMBOLS_PER_LEVEL * level), root.obj);
+			
+		}
+		public int height() {
+			
+			return height(root);
+		}
+		private int height(Node<T> root) {
+			int res = 0;
+			if (root != null) {
+				int heightLeft = height(root.left);
+				int heightRight = height(root.right);
+				res = Math.max(heightLeft, heightRight) + 1;
+			}
+			return res;
+			
+		}
+		
+		
+		public int width() {
+					
+			return width(root);
+		}
+		
+		
+		private int width(Node<T> root) {
+			int res = 0;
+			
+			List<Integer> levelsHolder = new ArrayList<>();
+				counter(root,0,levelsHolder);
+				if (!levelsHolder.isEmpty()) {
+				for (Integer num : levelsHolder) {
+					if (res<num) res=num;
+				}
+				}
+			return res;
+		}
+		
+		private void counter(Node<T> current, int level, List<Integer> levelsHolder) {
+			if (current != null) {
+				 levelsHolder.set(level, levelsHolder.get(level)!=null ? levelsHolder.get(level)+1: 1);
+				counter(current.left, level + 1, levelsHolder);
+				counter(current.right, level + 1, levelsHolder);
+			}	
+		}
+		
+		
+		public void inversion() {
+			inversion(root,0);
+			comp = comp.reversed();
+			
+		}
+		private void inversion(Node<T> current, int level) {
+			if (current != null) {
+				swap(current);
+				inversion(current.left,level + 1);
+				inversion(current.right,level + 1);
+			}
+			
+		}
+		private void swap(Node<T> current) {
+			Node<T> temp;		
+			temp = current.left;
+			current.left = current.right;
+			current.right = temp;
+		}
 
 }
