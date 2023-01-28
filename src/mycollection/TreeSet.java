@@ -168,36 +168,29 @@ public class TreeSet<T> extends AbstractCollection<T> implements Sorted<T> {
 		
 		@Override
 		public T floor(T element) {
-			
-			
-			
-			return null;
+			return floorCeiling(element, true);
 		}
+		
+		
 		@Override
-		//TODO !
 		public T ceiling(T element) {
+			return floorCeiling(element, false);
+			}
+		
+		private T floorCeiling(T pattern, boolean isFloor) {
+			T res = null;
+			int compRes = 0;
 			Node<T> current = root;
-			boolean next = true;
-			if (comp.compare(current.obj, element) < 0) {
-				while(comp.compare(element, current.obj) > 0) {
-					current = current.right;
-				}
+			while (current != null && (compRes = comp.compare(pattern, current.obj)) != 0) {
+				if ((compRes < 0 && !isFloor) || (compRes > 0 && isFloor) ) {
+					res = current.obj;
+				} 
+				current = compRes < 0 ? current.left : current.right;
 			}
+			return current == null ? res : current.obj;
 			
-			while(next) {
-				if (current.left!=null) {
-				if(comp.compare(element, current.left.obj) < 0 && current.left.right != null) {
-						current = current.left.right;
-				
-				} else {
-					current = current.left;
-					next = false;
-				}
-			} else next =false;
-			}
-			
-			return current.obj;
 		}
+		
 		@Override
 		public T first() {
 			return leftBottom(root).obj;
@@ -293,5 +286,56 @@ public class TreeSet<T> extends AbstractCollection<T> implements Sorted<T> {
 			current.left = current.right;
 			current.right = temp;
 		}
+		
+		public void balance() {
+			Node<T>[] array = getNodesArray();
+			root = balance(array, 0, array.length - 1, null);
+			
+		}
+		private Node<T> balance(Node<T>[] array, int left, int right, Node<T>parent) {
+			Node<T> root = null;
+			if (left <= right) {
+				final int rootIndex = (left + right) / 2;
+				root = array[rootIndex];
+				root.parent = parent;
+				root.left = balance(array, left, rootIndex - 1, root);
+				root.right = balance(array, rootIndex + 1, right, root);
+			}
+			return root;
+		}
+		
+		
+		@SuppressWarnings("unchecked")
+		private Node<T>[] getNodesArray() {
+			Node<T> res[] = new Node[size];
+			int index = 0;
+			if (root != null) {
+				Node<T> current = getLeastNode(root);
+				while (current != null) {
+					res[index++] = current;
+					current = getNextCurrent(current);
+				} 
+			}
+			return res;
+		}
+		
+		private Node<T> getLeastNode(Node<T> current) {
+			while(current.left != null) {
+				current = current.left;
+			}
+			return current;
+		}
+		
+		   private Node<T> getNextCurrent(Node<T> current) {
+				
+				return current.right == null ? getGreaterParent(current) : getLeastNode(current.right);
+			}
+		   
+		   private Node<T> getGreaterParent(Node<T> current) {
+				while(current.parent != null && current.parent.left != current) {
+					current = current.parent;
+				}
+				return current.parent;
+			}
 
 }

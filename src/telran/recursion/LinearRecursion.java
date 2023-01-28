@@ -83,36 +83,24 @@ public class LinearRecursion {
 		
 	}
 	
-	public static boolean isSubstring(String string, String subString) {
+	public static boolean isSubstring(String str, String substr) {
 		boolean res = false;
-		
-		if (string.length() > 0) {
-			if (subString.charAt(0) == string.charAt(0)) {
-				String str = subString;
-				
-					if(isSub(string, str) == 0) {
-						res = res | isSubstring(string.substring(1), subString);
-					} else res = true;
-					
-			} else {
-				res = res |isSubstring(string.substring(1), subString);
-			}
-				
-		}
-		return res;
-	}
+		if (str.length() >= substr.length()) {
+			res = isEqual(str, substr) ? true : isSubstring(str.substring(1), substr);
+		} 
 
-	private static int isSub(String string, String str) {
-		int res = 0;
-		if (str.length() > 0) {
-			if (string.charAt(0) == str.charAt(0)) {
-				res = res | isSub(string.substring(1), str.substring(1));
-			}  
-		} else {
-			res = 1;
-		}
 		return res;
-	
+
+	}
+	private static boolean isEqual(String str, String substr) {
+		boolean res = false;
+		if (substr.length() == 0) {
+			res = true;
+		} else if (str.charAt(0) == substr.charAt(0)) {
+			res = isEqual(str.substring(1), substr.substring(1));
+		}
+		
+		return res;
 	}
 
 }
