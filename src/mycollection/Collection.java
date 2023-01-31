@@ -1,8 +1,13 @@
 package mycollection;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public interface Collection<T> extends Iterable<T> {
 
@@ -34,5 +39,21 @@ public interface Collection<T> extends Iterable<T> {
 		}
 		Arrays.fill(array, size(), array.length, null);
 		return array;
+	}
+	
+	default Stream<T> stream() {
+		return StreamSupport.stream(this.spliterator(), false);
+	}
+	default Stream<T> parallelStream() {
+		return StreamSupport.stream(this.spliterator(), true);
+	}
+	
+	
+	default T[] toArrayShuffling(T[] array) {
+		Random r = new Random();
+		return this.stream()
+				.sorted((a, b) -> a.hashCode()*(r.nextInt(-100, 100)) - b.hashCode()*(r.nextInt(-100, 100)))
+				.collect(Collectors.toList())
+				.toArray(array);
 	}
 }

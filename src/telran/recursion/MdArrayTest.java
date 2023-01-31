@@ -16,6 +16,7 @@ public class MdArrayTest {
 	@BeforeEach
 	void setUp() {
 		array = new MdArray<>(new int[]{10,5,7}, 50); 
+	
 	}
 	
 	@Test

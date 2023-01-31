@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -118,5 +119,17 @@ public abstract class CollectionTest {
 			it.next();
 		}
 		assertThrowsExactly(NoSuchElementException.class, () -> it.next());
+	}
+	
+	@Test
+	void shuffelingTest() {
+		Integer [] arr1 = collection.toArrayShuffling(new Integer[collection.size()]);
+		Integer [] arr2 = collection.toArrayShuffling(new Integer[collection.size()]);
+		Integer [] arr3 = collection.toArrayShuffling(new Integer[collection.size()]);
+		
+		assertFalse(Arrays.equals(arr1, arr2));
+		assertFalse(Arrays.equals(arr1, arr3));
+		assertFalse(Arrays.equals(arr2, arr3));
+		
 	}
 }

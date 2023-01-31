@@ -4,6 +4,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -60,8 +63,5 @@ public class ArrayListTest extends ListTest {
 		assertEquals(3, artrr.length);
 	}
 	
-	void iterTest() {
-		
-	}
 
 }

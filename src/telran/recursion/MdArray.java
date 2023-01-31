@@ -9,13 +9,16 @@ public class MdArray<T> {
 	
 	private MdArray<T>[] array;
 	private T value;
-	private static int[]dimen;
+	private int[]dimen;
+	
 	public MdArray(int dimensions[], T value) {
 		this(dimensions, 0, value);
 	}
 	@SuppressWarnings("unchecked")
 	public MdArray(int[] dimensions, int firstDim, T value) {
+		
 		dimen = dimensions;
+
 		if (firstDim == dimensions.length) {
 			this.value = value;
 			array = null;
