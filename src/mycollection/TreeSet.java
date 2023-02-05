@@ -140,7 +140,8 @@ public class TreeSet<T> extends AbstractCollection<T> implements Sorted<T> {
 				}			
 			
 			}	
-		}			
+		}		
+			size--;
 			return deletedNode==null ? false : true;
 		}
 
@@ -268,15 +269,15 @@ public class TreeSet<T> extends AbstractCollection<T> implements Sorted<T> {
 		
 		
 		public void inversion() {
-			inversion(root,0);
+			inversion(root);
 			comp = comp.reversed();
 			
 		}
-		private void inversion(Node<T> current, int level) {
+		private void inversion(Node<T> current) {
 			if (current != null) {
 				swap(current);
-				inversion(current.left,level + 1);
-				inversion(current.right,level + 1);
+				inversion(current.left);
+				inversion(current.right);
 			}
 			
 		}
@@ -337,5 +338,25 @@ public class TreeSet<T> extends AbstractCollection<T> implements Sorted<T> {
 				}
 				return current.parent;
 			}
+		   
+			@Override
+			public T get(T pattern) {
+				T res = null;
+				Node<T> current = root;
+				int compRes;
+				while(current != null && res == null) {			
+					compRes = comp.compare(pattern, current.obj);
+					if (compRes == 0) {
+						res = current.obj;
+					} else {
+						current = compRes < 0 ? current.left : current.right;
+					}
+					
+				}
+				return res;
+			}
+		
+		
+		
 
 }
