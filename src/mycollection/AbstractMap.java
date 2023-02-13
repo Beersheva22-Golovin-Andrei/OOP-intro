@@ -18,18 +18,6 @@ public abstract class AbstractMap<K, V> implements Map<K,V> {
 			return res;
 		}
 
-		@Override
-		public V putIfAbsent(K key, V value) {
-			V res = null;
-			Entry<K,V> entryForSearch = new Entry<>(key, value);
-			Entry<K,V> entryResult = set.get(entryForSearch);
-			if (entryResult == null) {
-				set.add(entryForSearch);
-			} else {
-				res = entryResult.getValue();
-			}
-			return res;
-		}
 
 		@Override
 		public V get(K key) {
@@ -41,11 +29,6 @@ public abstract class AbstractMap<K, V> implements Map<K,V> {
 			return res;
 		}
 
-		@Override
-		public V getOrDefault(K key, V value) {
-			V res = get(key);
-			return res == null ? value : res;
-		}
 
 		@Override
 		public boolean containsKey(K key) {

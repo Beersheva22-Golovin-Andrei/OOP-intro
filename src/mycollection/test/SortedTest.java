@@ -5,21 +5,26 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.util.Arrays;
+import java.util.Random;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import mycollection.Set;
 import mycollection.Sorted;
-import mycollection.TreeSet;
 
-public class SortedTest extends CollectionTest{
-	TreeSet<Integer> sorted;
+public abstract class SortedTest extends SetTest{
+	
+	protected static final int N_ELEMNTS = 100000;
+	protected static final int N_RUNS = 10000;
+	private Random gen = new Random();
+	Sorted<Integer> sorted;
 	@Override
 	@BeforeEach
 	void setUp() throws Exception {
 		super.setUp();
-		 sorted = (TreeSet<Integer>)collection;
+		 sorted = (Sorted<Integer>)collection;
 	}
 
 	@Override
@@ -33,7 +38,7 @@ public class SortedTest extends CollectionTest{
 			actual[index++] = num;
 		}
 		assertArrayEquals(expected, actual);
-
+		
 	}
 	//{-5, 10, 15, 100, 120, 134, 280  };
 	@Test
@@ -46,18 +51,12 @@ public class SortedTest extends CollectionTest{
 	}
 	@Test
 	void ceilingTest() {
-		/*
-		 * assertEquals((Integer)100, sorted.ceiling(100));
-		 * assertNull(sorted.ceiling(281));
-		 */
-		/*
-		 * assertEquals((Integer)15, sorted.ceiling(13)); assertEquals((Integer)10,
-		 * sorted.ceiling(0)); assertEquals((Integer)(-5), sorted.ceiling(-10));
-		 * assertEquals((Integer)280, sorted.ceiling(150));
-		 */
-		
-		  assertEquals((Integer)31, sorted.ceiling(30));
-		  
+		assertEquals((Integer)100, sorted.ceiling(100));
+		assertNull(sorted.ceiling(281));
+		assertEquals((Integer)15, sorted.ceiling(13));
+		assertEquals((Integer)10, sorted.ceiling(0));
+		assertEquals((Integer)(-5), sorted.ceiling(-10));
+		assertEquals((Integer)280, sorted.ceiling(150));
 	}
 	@Test
 	void firstTest() {
@@ -67,11 +66,27 @@ public class SortedTest extends CollectionTest{
 	void lastTest() {
 		assertEquals((Integer)280,sorted.last());
 	}
-
-	@Override
-	void testAdd() {
-		// TODO Auto-generated method stub
+	@Test
+	@Disabled
+	void performanceTestSortedAdding() {
+		Sorted<Integer> sorted = getSortedCollection();
+		IntStream.range(0, N_ELEMNTS).forEach(i -> sorted.add(i));
+		runPerformanceTest(sorted);
+	}
+	protected void runPerformanceTest(Sorted<Integer> sorted) {
 		
+		for (int i = 0; i < N_RUNS; i++) {
+			sorted.floor(gen.nextInt());
+		}
+	}
+
+	protected abstract Sorted<Integer> getSortedCollection();
+
+	@Test
+	void performanceTestRandomAdding() {
+		Sorted<Integer> sorted = getSortedCollection();
+		IntStream.range(0, N_ELEMNTS).forEach(i -> sorted.add(gen.nextInt()));
+		runPerformanceTest(sorted);
 	}
 
 }

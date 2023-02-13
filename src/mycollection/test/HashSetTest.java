@@ -2,6 +2,7 @@ package mycollection.test;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.Objects;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -58,5 +59,12 @@ public class HashSetTest extends SetTest {
 			}
 			
 		}
+		
+
+		@Test
+		void testnull () {
+			System.out.print(Objects.hash(null));
+		}
+
 	
 }
