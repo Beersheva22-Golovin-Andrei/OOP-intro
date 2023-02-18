@@ -5,20 +5,20 @@ import java.util.NoSuchElementException;
 
 public class LinkedHashSet<T> extends AbstractCollection<T> implements Set<T> {
 
-	private HashMap<Integer,Value<T>> map;
+	private HashMap<T,Value<T>> map;
 	
 	private Value<T> prev;
 	
 	private Value<T> head;
 	
 	public LinkedHashSet () {
-		map = new HashMap <Integer,Value<T>>();
+		map = new HashMap <T,Value<T>>();
 	}
 	
 	private static class Value<T> {
 		
-		Integer prevHash;
-		Integer nextHash;
+		T prevT;
+		T nextT;
 		T obj;
 		
 		Value (T obj){
@@ -45,7 +45,7 @@ public class LinkedHashSet<T> extends AbstractCollection<T> implements Set<T> {
 			if(counter == 0) {
 				value = current;
 			} else {
-				value = map.get(current.nextHash);
+				value = map.get(current.nextT);
 			}
 			current = value;
 			counter++;
@@ -57,10 +57,10 @@ public class LinkedHashSet<T> extends AbstractCollection<T> implements Set<T> {
 	public boolean add(T element) {
 		boolean res = false;
 		Value<T> addedValue = new Value<T>(element);
-		if (map.putIfAbsent(element.hashCode(), addedValue)==null) {
+		if (map.putIfAbsent(element, addedValue)==null) {
 			if (prev != null) {
-				addedValue.prevHash=prev.obj.hashCode();
-				prev.nextHash = element.hashCode();
+				addedValue.prevT=prev.obj;
+				prev.nextT = element;
 			} else head = addedValue;
 			prev = addedValue;
 			size++;
@@ -72,13 +72,13 @@ public class LinkedHashSet<T> extends AbstractCollection<T> implements Set<T> {
 	@Override
 	public boolean remove(T pattern) {
 		boolean res = false;
-		Integer patternsHash = pattern.hashCode();
-		Value<T> removedValue = map.get(patternsHash);
+		
+		Value<T> removedValue = map.get(pattern);
 		if (removedValue!=null) {
 			
-			map.get(removedValue.prevHash).nextHash = removedValue.nextHash;
-			map.get(removedValue.nextHash).prevHash = removedValue.prevHash;
-			if (map.remove(patternsHash)!=null) {
+			map.get(removedValue.prevT).nextT = removedValue.nextT;
+			map.get(removedValue.nextT).prevT = removedValue.prevT;
+			if (map.remove(pattern)!=null) {
 				res = true;
 				size--;
 			}
@@ -88,7 +88,7 @@ public class LinkedHashSet<T> extends AbstractCollection<T> implements Set<T> {
 
 	@Override
 	public boolean contains(T pattern) {
-		return map.containsKey(pattern.hashCode());
+		return map.containsKey(pattern);
 	}
 
 	@Override
@@ -98,6 +98,6 @@ public class LinkedHashSet<T> extends AbstractCollection<T> implements Set<T> {
 
 	@Override
 	public T get(T pattern) {
-		return map.get(pattern.hashCode()).obj;
+		return map.get(pattern).obj;
 	}
 }
